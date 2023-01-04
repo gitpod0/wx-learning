@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tencent.wxcloudrun.dao.CountersMapper;
 import com.tencent.wxcloudrun.model.Counter;
 import com.tencent.wxcloudrun.service.CounterService;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.List;
 
 @Service
 public class CounterServiceImpl implements CounterService {
@@ -20,16 +20,16 @@ public class CounterServiceImpl implements CounterService {
 
   @Override
   public Optional<Counter> getCounter(Integer id) {
-    return Optional.ofNullable(countersMapper.getCounter(id));
+    return Optional.ofNullable(countersMapper.selectById(id));
   }
 
   @Override
   public void upsertCount(Counter counter) {
-    countersMapper.upsertCount(counter);
+    countersMapper.updateById(counter);
   }
 
   @Override
   public void clearCount(Integer id) {
-    countersMapper.clearCount(id);
+    countersMapper.delete(new QueryWrapper<Counter>().eq("id", id));
   }
 }
